@@ -10,14 +10,30 @@ public class Entity implements Serializable {
     private double[] polygonCoordinates;
     private double x;
     private double y;
+    private double xVelocity;
+    private double yVelocity;
     private double rotation;
     private float radius;
             
+    public double getXVelocity() {
+        return this.xVelocity;
+    }
+
+    public double getYVelocity() {
+        return this.yVelocity;
+    }
+
+    public double setXVelocity(double velocity) {
+        return this.xVelocity = velocity;
+    }
+
+    public double setYVelocity(double velocity) {
+        return this.yVelocity = velocity;
+    }
 
     public String getID() {
         return ID.toString();
     }
-
 
     public void setPolygonCoordinates(double... coordinates ) {
         this.polygonCoordinates = coordinates;

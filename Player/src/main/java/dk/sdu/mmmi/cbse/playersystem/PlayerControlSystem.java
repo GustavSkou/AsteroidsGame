@@ -19,7 +19,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
             
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity playerEntity : world.getEntities(Player.class)) {
+            Player player = (Player) playerEntity;
+
+            double changeX = Math.cos(Math.toRadians(player.getRotation()));
+            double changeY = Math.sin(Math.toRadians(player.getRotation()));
+            
+            player.setXVelocity(player.getSpeedProportion() * 0.05 * changeX);
+            player.setYVelocity(player.getSpeedProportion() * 0.05 * changeY);
+            
+            player.setX(player.getX() + player.getXVelocity());
+            player.setY(player.getY() + player.getYVelocity());
+
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setRotation(player.getRotation() - 3);                
             }
@@ -29,10 +40,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+                player.addToSpeedProportion(1);
+            } else {
+                player.addToSpeedProportion(-5);
             }
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {                
@@ -41,23 +51,21 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 );
             }
             
-        if (player.getX() < 0) {
-            player.setX(1);
-        }
+            if (player.getX() < 0) {
+                player.setX(1);
+            }
 
-        if (player.getX() > gameData.getDisplayWidth()) {
-            player.setX(gameData.getDisplayWidth()-1);
-        }
+            if (player.getX() > gameData.getDisplayWidth()) {
+                player.setX(gameData.getDisplayWidth()-1);
+            }
 
-        if (player.getY() < 0) {
-            player.setY(1);
-        }
+            if (player.getY() < 0) {
+                player.setY(1);
+            }
 
-        if (player.getY() > gameData.getDisplayHeight()) {
-            player.setY(gameData.getDisplayHeight()-1);
-        }
-
-                                        
+            if (player.getY() > gameData.getDisplayHeight()) {
+                player.setY(gameData.getDisplayHeight()-1);
+            }                        
         }
     }
 

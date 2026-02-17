@@ -12,20 +12,10 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            double changeX = Math.cos(Math.toRadians(bullet.getRotation()));
-            double changeY = Math.sin(Math.toRadians(bullet.getRotation()));
-            bullet.setX(bullet.getX() + changeX * 3);
-            bullet.setY(bullet.getY() + changeY * 3);
+            bullet.setX(bullet.getX() + bullet.getXVelocity());
+            bullet.setY(bullet.getY() + bullet.getYVelocity());
             
-            if (bullet.getX() > gameData.getDisplayWidth() || bullet.getX() < 0) {
-                world.removeEntity(bullet);
-            }
-
-            if (bullet.getY() > gameData.getDisplayHeight() || bullet.getY() < 0) {
-                world.removeEntity(bullet);
-            }
-
-            
+            removeOutOffBoundsBullets(bullet, gameData, world);
         }
     }
 
@@ -35,10 +25,23 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setPolygonCoordinates(1, -1, 1, 1, -1, 1, -1, -1);
         double changeX = Math.cos(Math.toRadians(shooter.getRotation()));
         double changeY = Math.sin(Math.toRadians(shooter.getRotation()));
+        
+        bullet.setXVelocity(shooter.getXVelocity() + changeX * 3);
+        bullet.setYVelocity(shooter.getYVelocity() + changeY * 3);
+        
         bullet.setX(shooter.getX() + changeX * 10);
         bullet.setY(shooter.getY() + changeY * 10);
+
         bullet.setRotation(shooter.getRotation());
         bullet.setRadius(1);
         return bullet;
+    }
+
+    private void removeOutOffBoundsBullets(Entity bullet, GameData gameData, World world) {
+        if (bullet.getX() > gameData.getDisplayWidth() || bullet.getX() < 0) {
+            world.removeEntity(bullet);
+        } else if (bullet.getY() > gameData.getDisplayHeight() || bullet.getY() < 0) {
+            world.removeEntity(bullet);
+        }
     }
 }

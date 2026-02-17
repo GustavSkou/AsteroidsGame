@@ -28,7 +28,6 @@ public class CollisionDetector implements IPostEntityProcessingService {
                 }
             }
         }
-
     }
 
     public Boolean collides(Entity entity1, Entity entity2) {
@@ -37,5 +36,10 @@ public class CollisionDetector implements IPostEntityProcessingService {
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
         return distance < (entity1.getRadius() + entity2.getRadius());
     }
-
 }
+/*
+public Boolean collidesWithEgde(Entity entity, World world) {
+        float dx = (float) entity1.getX() - world.
+        float dy = (float) entity1.getY() - 
+    }
+         */

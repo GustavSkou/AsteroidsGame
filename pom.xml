@@ -16,8 +16,6 @@
         <module>Player</module>
         <module>Bullet</module>
         <module>CommonBullet</module>
-        <module>CommonAsteroids</module>
-        <module>Asteroids</module>
         <module>Collision</module>
         <module>enemy</module>
     </modules>
