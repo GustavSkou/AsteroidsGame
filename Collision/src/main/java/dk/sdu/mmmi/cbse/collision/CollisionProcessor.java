@@ -1,0 +1,36 @@
+package dk.sdu.mmmi.cbse.collision;
+
+import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.GameData;
+import dk.sdu.mmmi.cbse.common.data.World;
+
+import java.util.List;
+
+import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+
+public class CollisionProcessor implements IPostEntityProcessingService {
+    public void process(GameData gameData, World world) {
+        
+        Entity[] entities = world.getEntitiesAsArray();
+        for (int i = 0; i < entities.length - 1; i++) {
+            Entity currentEntity = entities[i];
+            Entity nextEntity = entities[i+1];
+            double distanceBetweenEntities = distanceBetweenPoints(currentEntity.getX(), currentEntity.getY(), nextEntity.getX(), nextEntity.getY());
+            if (hasCollided(distanceBetweenEntities, currentEntity, nextEntity)) {
+                world.removeEntity(currentEntity);
+                world.removeEntity(nextEntity);
+            }
+        }
+    }
+
+    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        double length = x2 - x1;
+        double height = y2 - y1;
+        double distance = Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
+        return distance;
+    }
+
+    private boolean hasCollided(double distanceBetween, Entity entity1, Entity entity2) {
+        return distanceBetween <= entity1.getRadius() + entity2.getRadius();
+    }
+}
