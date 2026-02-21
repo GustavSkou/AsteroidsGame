@@ -2,11 +2,11 @@ package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.movement.MovementSPI;
+import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -21,12 +21,16 @@ public class PlayerProcessor implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)) {
 
             getMovementSPIs().stream().findFirst().ifPresent(
-                    movementSPI -> {movementSPI.controlMovement(player, gameData);}
+                movementSPI -> {
+                    movementSPI.controlMovement(player, gameData);
+                }
             );
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
                 getBulletSPIs().stream().findFirst().ifPresent(
-                        spi -> {world.addEntity(spi.createBullet(player, gameData));}
+                    bulletSPI -> {
+                        world.addEntity(bulletSPI.createBullet(player, gameData));
+                    }
                 );
             }
 

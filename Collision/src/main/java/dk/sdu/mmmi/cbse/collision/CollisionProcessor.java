@@ -7,15 +7,16 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 public class CollisionProcessor implements IPostEntityProcessingService {
     public void process(GameData gameData, World world) {
-        
         Entity[] entities = world.getEntitiesAsArray();
         for (int i = 0; i < entities.length - 1; i++) {
-            Entity currentEntity = entities[i];
-            Entity nextEntity = entities[i+1];
-            double distanceBetweenEntities = distanceBetweenPoints(currentEntity.getX(), currentEntity.getY(), nextEntity.getX(), nextEntity.getY());
-            if (hasCollided(distanceBetweenEntities, currentEntity, nextEntity)) {
-                world.removeEntity(currentEntity);
-                world.removeEntity(nextEntity);
+            for (int j = i + 1; j < entities.length; j++) {
+                Entity currentEntity = entities[i];
+                Entity nextEntity = entities[j];
+                double distanceBetweenEntities = distanceBetweenPoints(currentEntity.getX(), currentEntity.getY(), nextEntity.getX(), nextEntity.getY());
+                if (hasCollided(distanceBetweenEntities, currentEntity, nextEntity)) {
+                    world.removeEntity(currentEntity);
+                    world.removeEntity(nextEntity);
+                }
             }
         }
     }
