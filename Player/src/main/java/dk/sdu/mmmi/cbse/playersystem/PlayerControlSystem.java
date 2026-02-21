@@ -2,6 +2,7 @@ package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
+import dk.sdu.mmmi.cbse.common.movement.MovementSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
@@ -18,58 +19,48 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-            
-        for (Entity playerEntity : world.getEntities(Player.class)) {
-            Player player = (Player) playerEntity;
+        for (Entity player : world.getEntities(Player.class)) {
 
-            double changeX = Math.cos(Math.toRadians(player.getRotation()));
-            double changeY = Math.sin(Math.toRadians(player.getRotation()));
-            
-            player.setXVelocity(player.getSpeedProportion() * 0.05 * changeX);
-            player.setYVelocity(player.getSpeedProportion() * 0.05 * changeY);
-            
-            player.setX(player.getX() + player.getXVelocity());
-            player.setY(player.getY() + player.getYVelocity());
+            getMovementSPIs().stream().findFirst().ifPresent(
+                    movementSPI -> {movementSPI.controlMovement(player, gameData);}
+            );
 
-            if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 3);                
-            }
-            
-            if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 3);                
-            }
-
-            if (gameData.getKeys().isDown(GameKeys.UP)) {
-                player.addToSpeedProportion(1);
-            } else {
-                player.addToSpeedProportion(-5);
-            }
-
-            if(gameData.getKeys().isDown(GameKeys.SPACE)) {                
+            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
                 getBulletSPIs().stream().findFirst().ifPresent(
                         spi -> {world.addEntity(spi.createBullet(player, gameData));}
                 );
             }
+
+            double changeX = Math.cos(Math.toRadians(player.getRotation()));
+            double changeY = Math.sin(Math.toRadians(player.getRotation()));
+
+            double speedFactor = Math.pow(player.getNormalizedSpeed(), 2);
+            player.setXVelocity(speedFactor * changeX * 5);
+            player.setYVelocity(speedFactor * changeY * 5);
+            player.setX(player.getX() + player.getXVelocity());
+            player.setY(player.getY() + player.getYVelocity());
+
+
             
             if (player.getX() < 0) {
+                player.setX(gameData.getDisplayWidth());
+            } else if (player.getX() > gameData.getDisplayWidth()) {
                 player.setX(1);
             }
 
-            if (player.getX() > gameData.getDisplayWidth()) {
-                player.setX(gameData.getDisplayWidth()-1);
-            }
-
             if (player.getY() < 0) {
+                player.setY(gameData.getDisplayHeight());
+            } else if (player.getY() > gameData.getDisplayHeight()) {
                 player.setY(1);
-            }
-
-            if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight()-1);
             }                        
         }
     }
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends MovementSPI> getMovementSPIs() {
+        return ServiceLoader.load(MovementSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

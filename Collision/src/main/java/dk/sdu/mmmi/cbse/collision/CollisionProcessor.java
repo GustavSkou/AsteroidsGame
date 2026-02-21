@@ -3,9 +3,6 @@ package dk.sdu.mmmi.cbse.collision;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-
-import java.util.List;
-
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 public class CollisionProcessor implements IPostEntityProcessingService {
@@ -26,10 +23,12 @@ public class CollisionProcessor implements IPostEntityProcessingService {
     private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
         double length = x2 - x1;
         double height = y2 - y1;
-        double distance = Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
-        return distance;
+        return Math.sqrt(Math.pow(length, 2) + Math.pow(height, 2));
     }
 
+    /*
+     * Check if the entities are close enough, that their hitbox radius would touch
+     * */
     private boolean hasCollided(double distanceBetween, Entity entity1, Entity entity2) {
         return distanceBetween <= entity1.getRadius() + entity2.getRadius();
     }

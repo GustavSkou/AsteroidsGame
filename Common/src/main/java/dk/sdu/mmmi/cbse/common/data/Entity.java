@@ -14,7 +14,27 @@ public class Entity implements Serializable {
     private double yVelocity;
     private double rotation;
     private float radius;
-            
+    private double normalizedSpeed;
+
+    /*
+    * speed multiplier between 0 and 1
+    * */
+    public double getNormalizedSpeed() {
+        return normalizedSpeed;
+    }
+
+    /*
+     * speed multiplier between 0 and 1
+     * */
+    public void setNormalizedSpeed(double normalizedSpeed) {
+        if (normalizedSpeed > 1) {
+            normalizedSpeed = 1;
+        } else if  (normalizedSpeed < 0) {
+            normalizedSpeed = 0;
+        }
+        this.normalizedSpeed = normalizedSpeed;
+    }
+
     public double getXVelocity() {
         return this.xVelocity;
     }

@@ -22,7 +22,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
@@ -46,10 +45,13 @@ class Game {
 
     public void start(Stage window) throws Exception {
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
-        gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+
+        gameWindow.setPrefSize(900, 900);
         gameWindow.getChildren().add(text);
 
         Scene scene = new Scene(gameWindow);
+        gameData.setPane(gameWindow);
+
         scene.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.LEFT)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, true);
@@ -80,6 +82,10 @@ class Game {
 
         });
 
+        window.setScene(scene);
+        window.setTitle("ASTEROIDS");
+        window.show();
+
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getGamePluginServices()) {
             iGamePlugin.start(gameData, world);
@@ -89,9 +95,6 @@ class Game {
             polygons.put(entity, polygon);
             gameWindow.getChildren().add(polygon);
         }
-        window.setScene(scene);
-        window.setTitle("ASTEROIDS");
-        window.show();
     }
 
     public void render() {
@@ -101,6 +104,7 @@ class Game {
                 update();
                 draw();
                 gameData.getKeys().update();
+                //System.out.println(gameData.getDisplayHeight() + " " + gameData.getDisplayWidth());
             }
 
         }.start();
