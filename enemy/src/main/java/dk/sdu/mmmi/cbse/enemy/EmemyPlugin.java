@@ -8,7 +8,9 @@ public class EmemyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        Entity enemy = createEnemy(gameData);
+        Entity enemy = new Enemy();
+        enemy.setX(100);
+        enemy.setY(200);
         world.addEntity(enemy);
     }
     
@@ -17,15 +19,5 @@ public class EmemyPlugin implements IGamePluginService {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
         }
-    }
-
-    private Entity createEnemy(GameData gameData) {
-        Entity enemy = new Enemy();
-        enemy.setPolygonCoordinates(-5,-5,10,0,-5,5);
-        enemy.setX(100);
-        enemy.setY(200);
-        enemy.setRadius(8);
-        enemy.setRotation(20);
-        return enemy;
     }
 }

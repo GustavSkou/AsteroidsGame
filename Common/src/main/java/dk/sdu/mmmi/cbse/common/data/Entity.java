@@ -5,16 +5,16 @@ import java.util.UUID;
 
 public class Entity implements Serializable {
 
-    private final UUID ID = UUID.randomUUID();
+    protected final UUID ID = UUID.randomUUID();
     
-    private double[] polygonCoordinates;
-    private double x;
-    private double y;
-    private double xVelocity;
-    private double yVelocity;
-    private double rotation;
-    private float radius;
-    private double normalizedSpeed;
+    protected double[] polygonCoordinates;
+    protected double x;
+    protected double y;
+    protected double xVelocity;
+    protected double yVelocity;
+    protected double rotation;
+    protected float radius;
+    protected double normalizedSpeed;
 
     public double getXDirection() {
         return Math.cos(Math.toRadians(this.getRotation()));

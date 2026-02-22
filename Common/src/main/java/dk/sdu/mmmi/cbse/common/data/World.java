@@ -36,16 +36,16 @@ public class World {
         return entityMap.values().toArray(new Entity[0]);
     }
 
-    public <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
-        List<Entity> r = new ArrayList<>();
-        for (Entity e : getEntities()) {
+    public <E extends Entity> List<E> getEntities(Class<E>... entityTypes) {
+        List<E> result = new ArrayList<>();
+        for (Entity entity : getEntities()) {
             for (Class<E> entityType : entityTypes) {
-                if (entityType.equals(e.getClass())) {
-                    r.add(e);
+                if (entityType.equals(entity.getClass())) {
+                    result.add((E) entity);
                 }
             }
         }
-        return r;
+        return result;
     }
 
     public Entity getEntity(String ID) {

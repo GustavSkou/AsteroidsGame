@@ -10,18 +10,10 @@ public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        player = createPlayerShip(gameData);
+        player = new Player();
+        player.setX((double) gameData.getDisplayHeight() /2);
+        player.setY((double) gameData.getDisplayWidth() /2);
         world.addEntity(player);
-    }
-
-    private Entity createPlayerShip(GameData gameData) {
-        Entity playerShip = new Player();
-        playerShip.setPolygonCoordinates(-5,-5,10,0,-5,5);
-        System.out.println(gameData.getDisplayHeight());
-        playerShip.setX((double) gameData.getDisplayHeight() /2);
-        playerShip.setY((double) gameData.getDisplayWidth() /2);
-        playerShip.setRadius(8);
-        return playerShip;
     }
 
     @Override

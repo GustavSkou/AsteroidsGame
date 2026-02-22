@@ -23,9 +23,4 @@ public class GameKeys {
     public boolean isDown(int k) {
         return keyState[k];
     }
-
-    public boolean isPressed(int k) {
-        return keyState[k];
-    }
-
 }
