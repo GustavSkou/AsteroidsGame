@@ -22,21 +22,10 @@ public class EnemyProcessor implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            double changeX = Math.cos(Math.toRadians(enemy.getRotation()));
-            double changeY = Math.sin(Math.toRadians(enemy.getRotation()));
+            enemy.setX(enemy.getX() + enemy.getXDirection() * 0.5);
+            enemy.setY(enemy.getY() + enemy.getYDirection() * 0.5);
 
-            enemy.setX(enemy.getX() + changeX * 0.5);
-            enemy.setY(enemy.getY() + changeY * 0.5);
-            
-            for (Entity player : world.getEntities(Player.class)) {
-                double a = enemy.getX() - player.getX();
-                double b = enemy.getY() - player.getY();
-
-                double radians = Math.atan2 (b, a);
-                double degrees = Math.toDegrees(radians) + 180;
-                enemy.setRotation(degrees);
-                //System.out.println(a + " " + b + " " + radians + " " + degrees);
-            }
+            enemy.setRotation(rotationToPlayer(enemy, world));
 
             int randomInt = random.nextInt(60);
             if (randomInt == 1) {
@@ -45,6 +34,17 @@ public class EnemyProcessor implements IEntityProcessingService {
                 );
             }
         }
+    }
+
+    private double rotationToPlayer(Entity entity, World world) {
+        double degrees = 0;
+        for (Entity player : world.getEntities(Player.class)) {
+            double a = entity.getX() - player.getX();
+            double b = entity.getY() - player.getY();
+            double radians = Math.atan2 (b, a);
+            degrees = Math.toDegrees(radians) + 180;
+        }
+        return degrees;
     }
 
     private Collection<? extends BulletSPI> getBulletSPIs() {

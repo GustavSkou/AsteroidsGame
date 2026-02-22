@@ -5,9 +5,6 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
 public class EmemyPlugin implements IGamePluginService {
-    
-    public EmemyPlugin() {
-    }
 
     @Override
     public void start(GameData gameData, World world) {

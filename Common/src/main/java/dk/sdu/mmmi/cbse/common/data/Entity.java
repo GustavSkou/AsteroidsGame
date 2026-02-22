@@ -16,6 +16,14 @@ public class Entity implements Serializable {
     private float radius;
     private double normalizedSpeed;
 
+    public double getXDirection() {
+        return Math.cos(Math.toRadians(this.getRotation()));
+    }
+
+    public double getYDirection() {
+        return Math.sin(Math.toRadians(this.getRotation()));
+    }
+
     /*
     * speed multiplier between 0 and 1
     * */
@@ -65,7 +73,7 @@ public class Entity implements Serializable {
        
 
     public void setX(double x) {
-        this.x =x;
+        this.x = x;
     }
 
     public double getX() {
