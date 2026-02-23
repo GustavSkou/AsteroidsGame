@@ -43,8 +43,6 @@ public class PlayerProcessor implements IEntityProcessingService {
             player.setX(player.getX() + player.getXVelocity());
             player.setY(player.getY() + player.getYVelocity());
 
-
-            
             if (player.getX() < 0) {
                 player.setX(gameData.getDisplayWidth());
             } else if (player.getX() > gameData.getDisplayWidth()) {
