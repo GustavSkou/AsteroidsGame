@@ -1,8 +1,7 @@
 package dk.sdu.mmmi.cbse.asteroid;
 
-import dk.sdu.mmmi.cbse.common.asteroidSplitter.AsteroidSplitterSPI;
+import dk.sdu.mmmi.cbse.common.asteroid.AsteroidSplitterSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
-import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 
 import java.util.Random;
@@ -20,11 +19,11 @@ public class AsteroidSplitter implements AsteroidSplitterSPI {
     }
 
     private Entity[] getBabyAsteroids(Entity asteroid) {
-        Entity[] babyAsteroids = new Asteroid[2];
+        Entity[] babyAsteroids = new dk.sdu.mmmi.cbse.common.asteroid.Asteroid[2];
         double[][] velocities = getBabyVelocityVectors(asteroid);
 
         for (int i = 0; i < 2; i++) {
-            Entity babyAsteroid = new Asteroid();
+            Entity babyAsteroid = new dk.sdu.mmmi.cbse.common.asteroid.Asteroid();
 
             babyAsteroid.setXVelocity(velocities[i][0]);
             babyAsteroid.setYVelocity(velocities[i][1]);

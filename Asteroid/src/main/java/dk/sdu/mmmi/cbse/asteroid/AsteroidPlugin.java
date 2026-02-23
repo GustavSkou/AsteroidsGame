@@ -12,7 +12,7 @@ public class AsteroidPlugin implements IGamePluginService {
     }
 
     public void stop(GameData gameData, World world) {
-        for (Entity entity : world.getEntities(Asteroid.class)) {
+        for (Entity entity : world.getEntities(dk.sdu.mmmi.cbse.common.asteroid.Asteroid.class)) {
             world.removeEntity(entity);
         }
     }
