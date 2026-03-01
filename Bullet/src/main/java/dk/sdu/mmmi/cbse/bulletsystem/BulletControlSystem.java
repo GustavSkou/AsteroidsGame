@@ -14,7 +14,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity bullet : world.getEntities(Bullet.class)) {
             bullet.setX(bullet.getX() + bullet.getXVelocity());
             bullet.setY(bullet.getY() + bullet.getYVelocity());
-            
             removeOutOffBoundsBullets(bullet, gameData, world);
         }
     }

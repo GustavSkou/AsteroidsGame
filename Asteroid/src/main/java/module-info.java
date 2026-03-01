@@ -6,11 +6,8 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 module Asteroid {
     exports dk.sdu.mmmi.cbse.asteroid;
     requires Common;
-    requires CommonAsteroidSplitter;
+    requires CommonAsteroid;
 
-    /*
-    * The interfaces which have been implemented by this component
-    * */
     provides IEntityProcessingService with dk.sdu.mmmi.cbse.asteroid.AsteroidProcessor;
     provides IGamePluginService with dk.sdu.mmmi.cbse.asteroid.AsteroidPlugin;
     provides IPostEntityProcessingService with dk.sdu.mmmi.cbse.asteroid.AsteroidPostProcessor;

@@ -21,7 +21,6 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                 Entity nextEntity = entities[j];
                 double distanceBetweenEntities = distanceBetweenPoints(currentEntity.getX(), currentEntity.getY(), nextEntity.getX(), nextEntity.getY());
                 if (hasCollided(distanceBetweenEntities, currentEntity, nextEntity)) {
-
                     splitAsteroid(world, currentEntity, nextEntity);
                     world.removeEntity(currentEntity);
                     world.removeEntity(nextEntity);
@@ -37,17 +36,13 @@ public class CollisionProcessor implements IPostEntityProcessingService {
 
         if (currentEntity.getClass() == Asteroid.class) {
             getAsteroidSplitterSPIs().stream().findFirst().ifPresent(
-                splitterSPI -> {
-                    splitterSPI.split(currentEntity, world);
-                }
+                splitterSPI -> splitterSPI.split( (Asteroid) currentEntity, world)
             );
             return;
         }
         if (nextEntity.getClass() == Asteroid.class) {
             getAsteroidSplitterSPIs().stream().findFirst().ifPresent(
-                splitterSPI -> {
-                    splitterSPI.split(nextEntity, world);
-                }
+                splitterSPI -> splitterSPI.split( (Asteroid) nextEntity, world)
             );
             return;
         }
