@@ -5,8 +5,19 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import java.util.Random;
 
 public class Asteroid extends Entity {
+    private int health;
+
+    public int getHealth() {
+        return this.health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     public Asteroid() {
         Random rand = new Random();
+        health = 2;
         double size = rand.nextDouble(7,15);
         double[] polygonCoordinates = polyCoords();
 
