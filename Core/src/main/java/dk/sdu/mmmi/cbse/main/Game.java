@@ -101,12 +101,12 @@ class Game {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                gameData.updateDeltaTime(now);
                 update();
                 draw();
                 gameData.getKeys().update();
-                //System.out.println(gameData.getDisplayHeight() + " " + gameData.getDisplayWidth());
+                System.out.println(gameData.getDeltaTime());
             }
-
         }.start();
     }
 
@@ -120,14 +120,11 @@ class Game {
     }
 
     private void draw() {
-        for (Entity polygonEntity : polygons.keySet()) {
-            if (!world.getEntities().contains(polygonEntity)) {
-                Polygon removedPolygon = polygons.get(polygonEntity);
-                polygons.remove(polygonEntity);
-                gameWindow.getChildren().remove(removedPolygon);
-            }
-        }
+        remove();
+        place();
+    }
 
+    private void place() {
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
             if (polygon == null) {
@@ -139,7 +136,16 @@ class Game {
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
         }
+    }
 
+    private void remove() {
+        for (Entity polygonEntity : polygons.keySet()) {
+            if (!world.getEntities().contains(polygonEntity)) {
+                Polygon removedPolygon = polygons.get(polygonEntity);
+                polygons.remove(polygonEntity);
+                gameWindow.getChildren().remove(removedPolygon);
+            }
+        }
     }
 
     public List<IGamePluginService> getGamePluginServices() {

@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.cbse.playersystem;
+/*package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
@@ -10,3 +10,4 @@ public class PlayerBulletSPI implements BulletSPI {
 
     }
 }
+*/

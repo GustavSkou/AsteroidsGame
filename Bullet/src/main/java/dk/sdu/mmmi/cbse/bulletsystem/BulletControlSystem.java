@@ -12,8 +12,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            bullet.setX(bullet.getX() + bullet.getXVelocity());
-            bullet.setY(bullet.getY() + bullet.getYVelocity());
+            bullet.setX(bullet.getX() + bullet.getXVelocity() * gameData.getDeltaTime());
+            bullet.setY(bullet.getY() + bullet.getYVelocity() * gameData.getDeltaTime());
             removeOutOffBoundsBullets(bullet, gameData, world);
         }
     }

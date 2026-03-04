@@ -8,9 +8,9 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 public class AsteroidProcessor implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
-        for(Entity asteroid : world.getEntities(dk.sdu.mmmi.cbse.common.asteroid.Asteroid.class)){
-            asteroid.setX(asteroid.getX() + asteroid.getXVelocity() * asteroid.getNormalizedSpeed() * 2);
-            asteroid.setY(asteroid.getY() + asteroid.getYVelocity() * asteroid.getNormalizedSpeed() * 2);
+        for(Entity asteroid : world.getEntities(Entity.class)){
+            asteroid.setX(asteroid.getX() + asteroid.getXVelocity() * asteroid.getNormalizedSpeed() * 2 * gameData.getDeltaTime());
+            asteroid.setY(asteroid.getY() + asteroid.getYVelocity() * asteroid.getNormalizedSpeed() * 2 * gameData.getDeltaTime());
 
             if (asteroid.getX() < 0) {
                 asteroid.setX(gameData.getDisplayWidth());

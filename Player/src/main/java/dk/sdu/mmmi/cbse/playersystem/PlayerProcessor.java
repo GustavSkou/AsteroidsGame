@@ -37,11 +37,13 @@ public class PlayerProcessor implements IEntityProcessingService {
             double changeX = Math.cos(Math.toRadians(player.getRotation()));
             double changeY = Math.sin(Math.toRadians(player.getRotation()));
 
+            // giv player exp fart, desto længere du holder frem
             double speedFactor = Math.pow(player.getNormalizedSpeed(), 2);
             player.setXVelocity(speedFactor * changeX * 5);
             player.setYVelocity(speedFactor * changeY * 5);
-            player.setX(player.getX() + player.getXVelocity());
-            player.setY(player.getY() + player.getYVelocity());
+
+            player.setX(player.getX() + player.getXVelocity() * gameData.getDeltaTime());
+            player.setY(player.getY() + player.getYVelocity() * gameData.getDeltaTime());
 
             if (player.getX() < 0) {
                 player.setX(gameData.getDisplayWidth());

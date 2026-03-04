@@ -6,6 +6,21 @@ import javafx.scene.layout.Pane;
 public class GameData {
     private final GameKeys keys = new GameKeys();
     private Pane pane;
+    private double deltaTime;
+    private double timeNow = 0;
+    private double timePre = 0;
+
+    public double getDeltaTime() {
+        return deltaTime;
+    }
+
+    public void updateDeltaTime(double timeNow) {
+
+        this.timeNow = timeNow / 100000000; // time in seconds
+        this.deltaTime = this.timeNow - this.timePre; // calculate time between frames
+        this.timePre = this.timeNow;
+    }
+
 
     public Pane getPane() {
         return pane;

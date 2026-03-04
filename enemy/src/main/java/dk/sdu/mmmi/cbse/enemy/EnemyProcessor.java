@@ -22,8 +22,8 @@ public class EnemyProcessor implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            enemy.setX(enemy.getX() + enemy.getXDirection() * 0.5);
-            enemy.setY(enemy.getY() + enemy.getYDirection() * 0.5);
+            enemy.setX(enemy.getX() + enemy.getXDirection() * 0.5 * gameData.getDeltaTime());
+            enemy.setY(enemy.getY() + enemy.getYDirection() * 0.5 * gameData.getDeltaTime());
 
             enemy.setRotation(rotationToPlayer(enemy, world));
 
