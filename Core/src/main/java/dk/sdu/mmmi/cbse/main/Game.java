@@ -44,7 +44,7 @@ class Game {
     }
 
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        Text text = new Text(10, 20, "Destroyed asteroids: " + gameData.getScore());
 
         gameWindow.setPrefSize(900, 900);
         gameWindow.getChildren().add(text);

@@ -9,6 +9,7 @@ public class GameData {
     private double deltaTime;
     private double timeNow = 0;
     private double timePre = 0;
+    private double score = 0;
 
     public double getDeltaTime() {
         return deltaTime;
@@ -21,6 +22,13 @@ public class GameData {
         this.timePre = this.timeNow;
     }
 
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
 
     public Pane getPane() {
         return pane;
