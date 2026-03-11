@@ -34,6 +34,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
         bullet.setRotation(shooter.getRotation());
         bullet.setRadius(1);
+        System.out.println("bullet created");
         return bullet;
     }
 
