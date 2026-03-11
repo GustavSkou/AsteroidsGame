@@ -27,6 +27,7 @@ public class PlayerProcessor implements IEntityProcessingService {
             );
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
+                System.out.println(getBulletSPIs().size());
                 getBulletSPIs().stream().findFirst().ifPresent(
                     bulletSPI -> {
                         world.addEntity(bulletSPI.createBullet(player, gameData));
@@ -42,8 +43,8 @@ public class PlayerProcessor implements IEntityProcessingService {
             player.setXVelocity(speedFactor * changeX * 5);
             player.setYVelocity(speedFactor * changeY * 5);
 
-            player.setX(player.getX() + player.getXVelocity() * gameData.getDeltaTime());
-            player.setY(player.getY() + player.getYVelocity() * gameData.getDeltaTime());
+            player.setX(player.getX() + player.getXVelocity() * 10 * gameData.getDeltaTime());
+            player.setY(player.getY() + player.getYVelocity() * 10 * gameData.getDeltaTime());
 
             if (player.getX() < 0) {
                 player.setX(gameData.getDisplayWidth());
