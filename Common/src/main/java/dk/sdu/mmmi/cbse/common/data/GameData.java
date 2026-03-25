@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
@@ -10,6 +12,7 @@ public class GameData {
     private double timeNow = 0;
     private double timePre = 0;
     private double score = 0;
+    private final List<Entity> pendingPlayerEntityHits = new ArrayList<>();
 
     public double getDeltaTime() {
         return deltaTime;
@@ -18,7 +21,7 @@ public class GameData {
     public void updateDeltaTime(double timeNow) {
 
         this.timeNow = timeNow / 100000000; // time in seconds
-        this.deltaTime = this.timeNow - this.timePre; // calculate time between frames
+        this.deltaTime = this.timeNow - this.timePre; // time between frames
         this.timePre = this.timeNow;
     }
 
@@ -28,6 +31,16 @@ public class GameData {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public void registerPlayerEntityHit(Entity hitEntity) {
+        pendingPlayerEntityHits.add(hitEntity);
+    }
+
+    public List<Entity> consumePendingPlayerEntityHits() {
+        List<Entity> hits = new ArrayList<>(pendingPlayerEntityHits);
+        pendingPlayerEntityHits.clear();
+        return hits;
     }
 
     public Pane getPane() {

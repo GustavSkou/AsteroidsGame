@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.cbse.bulletsystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.Bullet;
+import dk.sdu.mmmi.cbse.common.bullet.BulletOwner;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -26,16 +27,24 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         double changeY = Math.sin(Math.toRadians(shooter.getRotation()));
 
         // add the shoots velocity to the bullets "normal" speed
-        bullet.setXVelocity(shooter.getXVelocity() + changeX * 3);
-        bullet.setYVelocity(shooter.getYVelocity() + changeY * 3);
+        bullet.setXVelocity(shooter.getXVelocity() + changeX * 30 );
+        bullet.setYVelocity(shooter.getYVelocity() + changeY * 30);
         
         bullet.setX(shooter.getX() + changeX * shooter.getRadius());
         bullet.setY(shooter.getY() + changeY * shooter.getRadius());
 
         bullet.setRotation(shooter.getRotation());
         bullet.setRadius(1);
-        System.out.println("bullet created");
+        ((Bullet) bullet).setOwner(resolveOwner(shooter));
+
         return bullet;
+    }
+
+    private BulletOwner resolveOwner(Entity shooter) {
+        if ("Player".equals(shooter.getClass().getSimpleName())) {
+            return BulletOwner.PLAYER;
+        }
+        return BulletOwner.ENEMY;
     }
 
     private void removeOutOffBoundsBullets(Entity bullet, GameData gameData, World world) {

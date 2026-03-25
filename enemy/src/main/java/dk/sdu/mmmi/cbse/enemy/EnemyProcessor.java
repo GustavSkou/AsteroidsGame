@@ -11,6 +11,7 @@ import java.util.ServiceLoader;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.enemy.Enemy;
 import dk.sdu.mmmi.cbse.playersystem.Player;
 
 import java.util.Random;
@@ -29,6 +30,7 @@ public class EnemyProcessor implements IEntityProcessingService {
 
             int randomInt = random.nextInt(60);
             if (randomInt == 1) {
+
                 getBulletSPIs().stream().findFirst().ifPresent(
                     spi -> {world.addEntity(spi.createBullet(enemy, gameData));}
                 );

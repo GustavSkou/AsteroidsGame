@@ -37,17 +37,18 @@ class Game {
     private final List<IEntityProcessingService> entityProcessingServiceList;
     private final List<IPostEntityProcessingService> postEntityProcessingServices;
 
+    private Text scoreText;
+
     Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServiceList, List<IPostEntityProcessingService> postEntityProcessingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
+        scoreText = new Text(10, 20, "Destroyed asteroids: " + gameData.getScore());
     }
 
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: " + gameData.getScore());
-
         gameWindow.setPrefSize(900, 900);
-        gameWindow.getChildren().add(text);
+        gameWindow.getChildren().add(scoreText);
 
         Scene scene = new Scene(gameWindow);
         gameData.setPane(gameWindow);
@@ -104,8 +105,8 @@ class Game {
                 gameData.updateDeltaTime(now);
                 update();
                 draw();
+                scoreText.setText("Destroyed asteroids: " + gameData.getScore());
                 gameData.getKeys().update();
-                System.out.println(gameData.getDeltaTime());
             }
         }.start();
     }
