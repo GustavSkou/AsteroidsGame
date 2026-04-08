@@ -8,14 +8,13 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPluginService;
+import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -33,13 +32,13 @@ class Game {
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Pane gameWindow = new Pane();
-    private final List<IGamePluginService> gamePluginServices;
-    private final List<IEntityProcessingService> entityProcessingServiceList;
-    private final List<IPostEntityProcessingService> postEntityProcessingServices;
+    private final List<IPluginService> gamePluginServices;
+    private final List<IProcessingService> entityProcessingServiceList;
+    private final List<IPostProcessingService> postEntityProcessingServices;
 
     private Text scoreText;
 
-    Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServiceList, List<IPostEntityProcessingService> postEntityProcessingServices) {
+    Game(List<IPluginService> gamePluginServices, List<IProcessingService> entityProcessingServiceList, List<IPostProcessingService> postEntityProcessingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
@@ -88,7 +87,7 @@ class Game {
         window.show();
 
         // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : getGamePluginServices()) {
+        for (IPluginService iGamePlugin : getGamePluginServices()) {
             iGamePlugin.start(gameData, world);
         }
         for (Entity entity : world.getEntities()) {
@@ -112,10 +111,10 @@ class Game {
     }
 
     private void update() {
-        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+        for (IProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
-        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
+        for (IPostProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.process(gameData, world);
         }
     }
@@ -149,15 +148,15 @@ class Game {
         }
     }
 
-    public List<IGamePluginService> getGamePluginServices() {
+    public List<IPluginService> getGamePluginServices() {
         return gamePluginServices;
     }
 
-    public List<IEntityProcessingService> getEntityProcessingServices() {
+    public List<IProcessingService> getEntityProcessingServices() {
         return entityProcessingServiceList;
     }
 
-    public List<IPostEntityProcessingService> getPostEntityProcessingServices() {
+    public List<IPostProcessingService> getPostEntityProcessingServices() {
         return postEntityProcessingServices;
     }
 

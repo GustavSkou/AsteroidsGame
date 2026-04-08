@@ -2,7 +2,7 @@ package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.movement.MovementSPI;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
@@ -14,10 +14,15 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerProcessor implements IEntityProcessingService {
+public class PlayerProcessor implements IProcessingService {
+
+    private static final double shotCooldown = 5;
+    private double remainingShotCooldown = 0;
 
     @Override
     public void process(GameData gameData, World world) {
+        remainingShotCooldown = Math.max(0, remainingShotCooldown - gameData.getDeltaTime());
+
         for (Entity player : world.getEntities(Player.class)) {
 
             getMovementSPIs().stream().findFirst().ifPresent(
@@ -26,13 +31,14 @@ public class PlayerProcessor implements IEntityProcessingService {
                 }
             );
 
-            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                System.out.println(getBulletSPIs().size());
+            if(gameData.getKeys().isDown(GameKeys.SPACE) && remainingShotCooldown <= 0) {
                 getBulletSPIs().stream().findFirst().ifPresent(
                     bulletSPI -> {
                         world.addEntity(bulletSPI.createBullet(player, gameData));
                     }
                 );
+
+                remainingShotCooldown = shotCooldown;
             }
 
             double changeX = Math.cos(Math.toRadians(player.getRotation()));

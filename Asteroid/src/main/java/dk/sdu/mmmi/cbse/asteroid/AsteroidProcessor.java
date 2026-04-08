@@ -4,9 +4,9 @@ import dk.sdu.mmmi.cbse.common.asteroid.Asteroid;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 
-public class AsteroidProcessor implements IEntityProcessingService {
+public class AsteroidProcessor implements IProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for(Entity asteroid : world.getEntities(Asteroid.class)){

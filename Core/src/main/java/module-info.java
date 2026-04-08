@@ -9,9 +9,9 @@ module Core {
     requires java.desktop;
     exports dk.sdu.mmmi.cbse.main;
     opens dk.sdu.mmmi.cbse.main to javafx.graphics,spring.core;
-    uses dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-    uses dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-    uses dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+    uses dk.sdu.mmmi.cbse.common.services.IPluginService;
+    uses dk.sdu.mmmi.cbse.common.services.IProcessingService;
+    uses dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 }
 
 

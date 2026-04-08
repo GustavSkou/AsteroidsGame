@@ -1,10 +1,10 @@
 
 import dk.sdu.mmmi.cbse.scoreprocesser.ScoreProcesser;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 
 module Score {
     requires Common;
     requires CommonAsteroid;
     requires CommonEnemy;
-    provides IPostEntityProcessingService with ScoreProcesser;
+    provides IPostProcessingService with ScoreProcesser;
 }

@@ -1,8 +1,8 @@
 package dk.sdu.mmmi.cbse.main;
 
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPluginService;
+import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 import java.util.List;
 import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
@@ -25,17 +25,17 @@ class ModuleConfig {
     }
 
     @Bean
-    public List<IEntityProcessingService> entityProcessingServiceList(){
-        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    public List<IProcessingService> entityProcessingServiceList(){
+        return ServiceLoader.load(IProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     @Bean
-    public List<IGamePluginService> gamePluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    public List<IPluginService> gamePluginServices() {
+        return ServiceLoader.load(IPluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     @Bean
-    public List<IPostEntityProcessingService> postEntityProcessingServices() {
-        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    public List<IPostProcessingService> postEntityProcessingServices() {
+        return ServiceLoader.load(IPostProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

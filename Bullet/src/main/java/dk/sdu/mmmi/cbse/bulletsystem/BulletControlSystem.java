@@ -6,9 +6,9 @@ import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 
-public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+public class BulletControlSystem implements IProcessingService, BulletSPI {
 
     @Override
     public void process(GameData gameData, World world) {
@@ -22,7 +22,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
-        bullet.setPolygonCoordinates(1, -1, 1, 1, -1, 1, -1, -1);
+        bullet.setPolygonCoordinates(
+                15, -1,
+                15, 1,
+                -1, 1,
+                -1, -1);
         double changeX = Math.cos(Math.toRadians(shooter.getRotation()));
         double changeY = Math.sin(Math.toRadians(shooter.getRotation()));
 
@@ -30,8 +34,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setXVelocity(shooter.getXVelocity() + changeX * 30 );
         bullet.setYVelocity(shooter.getYVelocity() + changeY * 30);
         
-        bullet.setX(shooter.getX() + changeX * shooter.getRadius());
-        bullet.setY(shooter.getY() + changeY * shooter.getRadius());
+        bullet.setX(shooter.getX() + changeX * shooter.getRadius() * 3);
+        bullet.setY(shooter.getY() + changeY * shooter.getRadius() * 3);
 
         bullet.setRotation(shooter.getRotation());
         bullet.setRadius(1);

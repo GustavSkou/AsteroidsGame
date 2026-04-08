@@ -1,6 +1,6 @@
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPluginService;
 import dk.sdu.mmmi.cbse.playersystem.PlayerProcessor;
 
 module Player {
@@ -9,8 +9,7 @@ module Player {
     requires CommonMovement;
     uses dk.sdu.mmmi.cbse.common.movement.MovementSPI;
     uses dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
-    provides IGamePluginService with dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
-    provides IEntityProcessingService with PlayerProcessor;
-    provides BulletSPI with dk.sdu.mmmi.cbse.playersystem.PlayerBulletSPI;
+    provides IPluginService with dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
+    provides IProcessingService with PlayerProcessor;
     exports dk.sdu.mmmi.cbse.playersystem;
 }

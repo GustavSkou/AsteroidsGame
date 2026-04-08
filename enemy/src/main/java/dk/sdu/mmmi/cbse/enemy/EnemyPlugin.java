@@ -4,9 +4,9 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.enemy.Enemy;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.cbse.common.services.IPluginService;
 
-public class EnemyPlugin implements IGamePluginService {
+public class EnemyPlugin implements IPluginService {
 
     @Override
     public void start(GameData gameData, World world) {
@@ -18,7 +18,7 @@ public class EnemyPlugin implements IGamePluginService {
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
+    public void cleanUp(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
         }

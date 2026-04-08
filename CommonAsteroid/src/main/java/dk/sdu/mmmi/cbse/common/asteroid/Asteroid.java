@@ -18,7 +18,7 @@ public class Asteroid extends Entity {
     public Asteroid() {
         Random rand = new Random();
         health = 2;
-        double size = rand.nextDouble(7,15);
+        double size = rand.nextDouble(7.0,15.0);
         double[] polygonCoordinates = polyCoords();
 
         for (int i = 0; i < polygonCoordinates.length; i++) {

@@ -14,14 +14,9 @@ public class World {
 
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
 
-
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);
         return entity.getID();
-    }
-
-    public void removeEntity(String entityID) {
-        entityMap.remove(entityID);
     }
 
     public void removeEntity(Entity entity) {
@@ -46,9 +41,5 @@ public class World {
             }
         }
         return result;
-    }
-
-    public Entity getEntity(String ID) {
-        return entityMap.get(ID);
     }
 }

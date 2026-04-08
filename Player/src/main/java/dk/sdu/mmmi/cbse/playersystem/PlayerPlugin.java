@@ -3,8 +3,8 @@ package dk.sdu.mmmi.cbse.playersystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-public class PlayerPlugin implements IGamePluginService {
+import dk.sdu.mmmi.cbse.common.services.IPluginService;
+public class PlayerPlugin implements IPluginService {
 
     private Entity player;
 
@@ -17,7 +17,7 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
+    public void cleanUp(GameData gameData, World world) {
         world.removeEntity(player);
     }
 }

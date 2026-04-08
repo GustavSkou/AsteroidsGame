@@ -8,14 +8,14 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.enemy.Enemy;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
-public class CollisionProcessor implements IPostEntityProcessingService {
+public class CollisionProcessor implements IPostProcessingService {
     public void process(GameData gameData, World world) {
         Entity[] entities = world.getEntitiesAsArray();
         for (int i = 0; i < entities.length - 1; i++) {

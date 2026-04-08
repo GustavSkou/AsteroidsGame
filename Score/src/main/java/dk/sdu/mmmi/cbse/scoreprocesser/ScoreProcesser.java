@@ -5,12 +5,12 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.enemy.Enemy;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 
 import java.util.List;
 
 
-public class ScoreProcesser implements IPostEntityProcessingService
+public class ScoreProcesser implements IPostProcessingService
 {
     private static final int ASTEROID_POINTS = 1;
     private static final int ENEMY_POINTS = 5;
