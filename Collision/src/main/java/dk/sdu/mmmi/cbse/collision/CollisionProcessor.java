@@ -33,6 +33,10 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         }
     }
 
+    private void removeEntities(Entity entity1, Entity entity2) {
+
+    }
+
     private void splitAsteroid(World world, Entity currentEntity, Entity nextEntity) {
         if (currentEntity.getClass() == Asteroid.class && nextEntity.getClass() == Asteroid.class) {
             return;

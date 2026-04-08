@@ -13,8 +13,8 @@ public enum ServiceLocator {
 
     INSTANCE;
 
-    private static final Map<Class, ServiceLoader> loadermap = new HashMap<>();
-    private final ModuleLayer layer;
+    private static final Map<Class, ServiceLoader> serviceLoaderRegister = new HashMap<>();
+    private final ModuleLayer moduleLayer;
 
     ServiceLocator() {
         try {
@@ -39,7 +39,7 @@ public enum ServiceLocator {
                     .resolve(pluginsFinder, ModuleFinder.of(), plugins);
 
             // Create a module layer for plugins
-            layer = ModuleLayer
+            moduleLayer = ModuleLayer
                     .boot()
                     .defineModulesWithOneLoader(pluginsConfiguration, ClassLoader.getSystemClassLoader());
         } catch (Exception e) {
@@ -49,27 +49,25 @@ public enum ServiceLocator {
     }
 
 
-    public <T> List<T> locateAll(Class<T> service) {
-        ServiceLoader<T> loader = loadermap.get(service);
+    public <T> List<T> locateAll(Class<T> serviceType) {
+        ServiceLoader<T> tServiceLoader = serviceLoaderRegister.get(serviceType);
+        List<T> serviceInstances = new ArrayList<T>();
 
-        if (loader == null) {
-            loader = ServiceLoader.load(layer, service);
-            loadermap.put(service, loader);
+        // If there is no serviceloader for the type, we will try to find to and add it to the map
+        if (tServiceLoader == null) {
+            tServiceLoader = ServiceLoader.load(moduleLayer, serviceType);
+            serviceLoaderRegister.put(serviceType, tServiceLoader);
         }
 
-        List<T> list = new ArrayList<T>();
-
-        if (loader != null) {
-            try {
-                for (T instance : loader) {
-                    list.add(instance);
-                }
-            } catch (ServiceConfigurationError serviceError) {
-                serviceError.printStackTrace();
+        try {
+            for (T serviceInstance : tServiceLoader) {
+                serviceInstances.add(serviceInstance);
             }
+        } catch (ServiceConfigurationError serviceError) {
+            serviceError.printStackTrace();
         }
 
-        return list;
+        return serviceInstances;
     }
 
 }
