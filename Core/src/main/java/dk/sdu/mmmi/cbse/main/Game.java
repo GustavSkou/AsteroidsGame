@@ -6,26 +6,24 @@ package dk.sdu.mmmi.cbse.main;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBindsSPI;
 import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IPluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-/**
- *
- * @author jcs
- */
+import static java.util.stream.Collectors.toList;
+
 class Game {
 
     private final GameData gameData = new GameData();
@@ -42,6 +40,7 @@ class Game {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
+
         scoreText = new Text(10, 20, "Destroyed asteroids: " + gameData.getScore());
     }
 
@@ -52,35 +51,14 @@ class Game {
         Scene scene = new Scene(gameWindow);
         gameData.setPane(gameWindow);
 
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.LEFT)) {
-                gameData.getKeys().setKey(GameKeys.LEFT, true);
-            }
-            if (event.getCode().equals(KeyCode.RIGHT)) {
-                gameData.getKeys().setKey(GameKeys.RIGHT, true);
-            }
-            if (event.getCode().equals(KeyCode.UP)) {
-                gameData.getKeys().setKey(GameKeys.UP, true);
-            }
-            if (event.getCode().equals(KeyCode.SPACE)) {
-                gameData.getKeys().setKey(GameKeys.SPACE, true);
-            }
-        });
-        scene.setOnKeyReleased(event -> {
-            if (event.getCode().equals(KeyCode.LEFT)) {
-                gameData.getKeys().setKey(GameKeys.LEFT, false);
-            }
-            if (event.getCode().equals(KeyCode.RIGHT)) {
-                gameData.getKeys().setKey(GameKeys.RIGHT, false);
-            }
-            if (event.getCode().equals(KeyCode.UP)) {
-                gameData.getKeys().setKey(GameKeys.UP, false);
-            }
-            if (event.getCode().equals(KeyCode.SPACE)) {
-                gameData.getKeys().setKey(GameKeys.SPACE, false);
-            }
-
-        });
+        // Use the discovered keybind implementation as the shared key source for all modules.
+        GameKeyBindsSPI gameKeyBindsSPI = getGameKeyBindsSPI().getFirst();
+        if (!(gameKeyBindsSPI instanceof dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBinds)) {
+            throw new IllegalStateException("GameKeyBindsSPI implementation must extend GameKeyBinds.");
+        }
+        dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBinds gameKeyBinds = (dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBinds) gameKeyBindsSPI;
+        gameData.setKeyBinds(gameKeyBinds);
+        gameKeyBindsSPI.setKeyBinds(scene);
 
         window.setScene(scene);
         window.setTitle("ASTEROIDS");
@@ -105,7 +83,6 @@ class Game {
                 update();
                 draw();
                 scoreText.setText("Destroyed asteroids: " + gameData.getScore());
-                gameData.getKeys().update();
             }
         }.start();
     }
@@ -160,4 +137,10 @@ class Game {
         return postEntityProcessingServices;
     }
 
+    public List<GameKeyBindsSPI> getGameKeyBindsSPI() {
+        return ServiceLoader.load( GameKeyBindsSPI.class )
+            .stream()
+            .map( ServiceLoader.Provider::get )
+            .collect( toList() );
+    }
 }

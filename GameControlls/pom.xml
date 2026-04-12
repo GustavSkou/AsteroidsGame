@@ -9,21 +9,14 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Movement</artifactId>
-    <packaging>jar</packaging>
-    <name>Movement</name>
+    <artifactId>GameControlls</artifactId>
 
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CommonMovement</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>CommonGameControlls</artifactId>

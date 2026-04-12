@@ -1,17 +1,17 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBinds;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 public class GameData {
-    private final GameKeys keys = new GameKeys();
     private Pane pane;
     private double deltaTime;
     private double timeNow = 0;
     private double timePre = 0;
     private double score = 0;
+    private GameKeyBinds keyBinds;
     private final List<Entity> pendingPlayerEntityHits = new ArrayList<>();
 
     public double getDeltaTime() {
@@ -47,8 +47,12 @@ public class GameData {
         this.pane = pane;
     }
 
-    public GameKeys getKeys() {
-        return keys;
+    public GameKeyBinds getKeyBinds() {
+        return keyBinds;
+    }
+
+    public void setKeyBinds(GameKeyBinds keyBinds) {
+        this.keyBinds = keyBinds;
     }
 
     public int getDisplayWidth() {

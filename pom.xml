@@ -24,6 +24,8 @@
         <module>Asteroid</module>
         <module>CommonAsteroid</module>
         <module>Score</module>
+        <module>CommonControlls</module>
+        <module>GameControlls</module>
     </modules>
     <properties>
         <java>java</java>

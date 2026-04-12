@@ -1,11 +1,11 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
+import dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBinds;
 import dk.sdu.mmmi.cbse.common.movement.MovementSPI;
 import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 
 import java.util.Collection;
@@ -22,6 +22,11 @@ public class PlayerProcessor implements IProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         remainingShotCooldown = Math.max(0, remainingShotCooldown - gameData.getDeltaTime());
+        GameKeyBinds keybinds = gameData.getKeyBinds();
+        if (keybinds == null) {
+            throw new IllegalStateException("Game keybinds have not been initialized.");
+        }
+
 
         for (Entity player : world.getEntities(Player.class)) {
 
@@ -31,7 +36,7 @@ public class PlayerProcessor implements IProcessingService {
                 }
             );
 
-            if(gameData.getKeys().isDown(GameKeys.SPACE) && remainingShotCooldown <= 0) {
+            if (keybinds.isDown(keybinds.getSPACE()) && remainingShotCooldown <= 0) {
                 getBulletSPIs().stream().findFirst().ifPresent(
                     bulletSPI -> {
                         world.addEntity(bulletSPI.createBullet(player, gameData));
@@ -73,4 +78,5 @@ public class PlayerProcessor implements IProcessingService {
     private Collection<? extends MovementSPI> getMovementSPIs() {
         return ServiceLoader.load(MovementSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
 }
