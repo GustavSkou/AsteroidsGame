@@ -23,16 +23,16 @@ public class BulletControlSystem implements IProcessingService, BulletSPI {
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
         bullet.setPolygonCoordinates(
-                15, -1,
-                15, 1,
+                1, -1,
+                1, 1,
                 -1, 1,
                 -1, -1);
         double changeX = Math.cos(Math.toRadians(shooter.getRotation()));
         double changeY = Math.sin(Math.toRadians(shooter.getRotation()));
 
         // add the shoots velocity to the bullets "normal" speed
-        bullet.setXVelocity(shooter.getXVelocity() + changeX * 30 );
-        bullet.setYVelocity(shooter.getYVelocity() + changeY * 30);
+        bullet.setXVelocity(shooter.getXVelocity() + changeX * 50 );
+        bullet.setYVelocity(shooter.getYVelocity() + changeY * 50);
         
         bullet.setX(shooter.getX() + changeX * shooter.getRadius() * 3);
         bullet.setY(shooter.getY() + changeY * shooter.getRadius() * 3);

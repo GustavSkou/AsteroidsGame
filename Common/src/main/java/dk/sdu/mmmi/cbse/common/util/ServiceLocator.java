@@ -49,7 +49,8 @@ public enum ServiceLocator {
     }
 
 
-    public <T> List<T> locateAll(Class<T> serviceType) {
+    public <T> List<T> locateAll(Class<T> serviceType) 
+    {
         ServiceLoader<T> tServiceLoader = serviceLoaderRegister.get(serviceType);
         List<T> serviceInstances = new ArrayList<T>();
 

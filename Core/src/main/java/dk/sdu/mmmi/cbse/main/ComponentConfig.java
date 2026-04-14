@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class ComponentConfig {
     
-    public ComponentConfig() {
-    }
-
     @Bean
     public Game game() {
+        /*
+            get the arguments using the serviceLoader to find the instaces
+        */
         return new Game ( 
             gamePluginServices(), 
             entityProcessingServiceList(), 
