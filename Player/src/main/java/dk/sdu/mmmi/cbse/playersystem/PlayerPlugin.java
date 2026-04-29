@@ -9,7 +9,7 @@ public class PlayerPlugin implements IPluginService {
     private Entity player;
 
     @Override
-    public void start(GameData gameData, World world) {
+    public void IStart(GameData gameData, World world) {
         player = new Player();
         player.setX((double) gameData.getDisplayHeight() /2);
         player.setY((double) gameData.getDisplayWidth() /2);
@@ -17,7 +17,7 @@ public class PlayerPlugin implements IPluginService {
     }
 
     @Override
-    public void cleanUp(GameData gameData, World world) {
+    public void ICleanUp(GameData gameData, World world) {
         world.removeEntity(player);
     }
 }

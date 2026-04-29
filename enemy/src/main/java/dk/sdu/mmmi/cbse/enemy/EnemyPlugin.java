@@ -9,7 +9,7 @@ import dk.sdu.mmmi.cbse.common.services.IPluginService;
 public class EnemyPlugin implements IPluginService {
 
     @Override
-    public void start(GameData gameData, World world) {
+    public void IStart(GameData gameData, World world) {
         /*
         Entity enemy = new Enemy();
         enemy.setX(100);
@@ -18,7 +18,7 @@ public class EnemyPlugin implements IPluginService {
     }
 
     @Override
-    public void cleanUp(GameData gameData, World world) {
+    public void ICleanUp(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             world.removeEntity(enemy);
         }

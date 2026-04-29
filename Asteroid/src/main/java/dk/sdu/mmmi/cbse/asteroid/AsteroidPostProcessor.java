@@ -3,11 +3,11 @@ package dk.sdu.mmmi.cbse.asteroid;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 
 import java.util.Random;
 
-public class AsteroidPostProcessor implements IPostProcessingService {
+public class AsteroidPostProcessor implements IProcessingService {
     Random random = new Random();
 
     @Override

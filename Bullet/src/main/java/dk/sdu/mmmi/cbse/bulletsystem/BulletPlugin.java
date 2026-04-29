@@ -9,10 +9,10 @@ import dk.sdu.mmmi.cbse.common.services.IPluginService;
 public class BulletPlugin implements IPluginService {
 
     @Override
-    public void start(GameData gameData, World world) {}
+    public void IStart(GameData gameData, World world) {}
 
     @Override
-    public void cleanUp(GameData gameData, World world) {
+    public void ICleanUp(GameData gameData, World world) {
         for (Entity e : world.getEntities()) {
             if (e.getClass() == Bullet.class) {
                 world.removeEntity(e);

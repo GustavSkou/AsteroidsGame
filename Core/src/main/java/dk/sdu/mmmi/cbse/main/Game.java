@@ -66,7 +66,7 @@ class Game {
 
         // Lookup all Game Plugins using ServiceLoader
         for (IPluginService iGamePlugin : getGamePluginServices()) {
-            iGamePlugin.start(gameData, world);
+            iGamePlugin.IStart(gameData, world);
         }
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());

@@ -5,7 +5,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 
 public interface IPluginService {
 
-    void start(GameData gameData, World world);
+    void IStart(GameData gameData, World world);
 
-    void cleanUp(GameData gameData, World world);
+    void ICleanUp(GameData gameData, World world);
 }
