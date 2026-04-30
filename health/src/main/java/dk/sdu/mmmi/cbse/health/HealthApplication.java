@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.cbse.score;
+package dk.sdu.mmmi.cbse.health;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,21 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class ScoreApplication {
+public class HealthApplication {
 
-	private static long score = 0;
+	private static long health = 100;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ScoreApplication.class, args);
+		SpringApplication.run(HealthApplication.class, args);
 	}
 
-	@GetMapping("/score")
-	public long getScore() {
-		return score;
+	@GetMapping("/health")
+	public long getHealth() {
+		return health;
 	}
 
-	@PostMapping("/score")
-	public long addPoints(@RequestParam(value = "point", defaultValue = "0") long point) {
-		return score = score + point;
+	@PostMapping("/health")
+	public long setHealth(@RequestParam(value = "amount", defaultValue = "0") long amount) {
+		health = amount;
+		return health;
 	}
 }

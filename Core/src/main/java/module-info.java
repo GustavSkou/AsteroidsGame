@@ -7,6 +7,7 @@ module Core {
     requires spring.beans;
     requires java.desktop;
     requires CommonGameControlls;
+    requires java.net.http;
 
     exports dk.sdu.mmmi.cbse.main;
     

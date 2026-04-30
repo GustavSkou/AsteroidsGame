@@ -5,6 +5,7 @@ module Collision {
     requires CommonAsteroid;
     requires CommonBullet;
     requires CommonEnemy;
+    requires java.net.http;
     uses dk.sdu.mmmi.cbse.common.asteroid.AsteroidSplitterSPI;
     provides IPostProcessingService with dk.sdu.mmmi.cbse.collision.CollisionProcessor;
 }

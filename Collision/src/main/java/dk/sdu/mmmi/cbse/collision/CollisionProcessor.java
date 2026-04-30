@@ -10,6 +10,10 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.enemy.Enemy;
 import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -33,9 +37,7 @@ public class CollisionProcessor implements IPostProcessingService {
         }
     }
 
-    private void removeEntities(Entity entity1, Entity entity2) {
-
-    }
+    private void removeEntities(Entity entity1, Entity entity2) { }
 
     private void splitAsteroid(World world, Entity currentEntity, Entity nextEntity) {
         if (currentEntity.getClass() == Asteroid.class && nextEntity.getClass() == Asteroid.class) {
@@ -81,8 +83,18 @@ public class CollisionProcessor implements IPostProcessingService {
             return;
         }
 
-        if (isAsteroid(hitEntity) || isEnemy(hitEntity)) {
-            gameData.registerPlayerEntityHit(hitEntity);
+        addScore( pointsToGive( hitEntity ) );
+    }
+
+    private int pointsToGive(Entity hitEntity) {
+        if (isAsteroid(hitEntity)) {
+            return 1;
+        }
+        else if (isEnemy(hitEntity)){
+            return 5;
+        }
+        else  {
+            return 0;
         }
     }
 
@@ -100,5 +112,19 @@ public class CollisionProcessor implements IPostProcessingService {
 
     private static Collection<? extends AsteroidSplitterSPI> getAsteroidSplitterSPIs() {
         return ServiceLoader.load(AsteroidSplitterSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private void addScore(long points) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/score?point=" + points))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+            
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

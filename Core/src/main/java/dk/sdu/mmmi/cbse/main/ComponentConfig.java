@@ -15,7 +15,7 @@ class ComponentConfig {
     @Bean
     public Game game() {
         /*
-            get the arguments using the serviceLoader to find the instaces
+            get the arguments using the serviceLoader to find the instaceses
         */
         return new Game ( 
             gamePluginServices(), 

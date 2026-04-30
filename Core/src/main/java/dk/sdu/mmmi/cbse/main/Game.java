@@ -11,6 +11,11 @@ import dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBindsSPI;
 import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IPluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -34,19 +39,21 @@ class Game {
     private final List<IProcessingService> entityProcessingServiceList;
     private final List<IPostProcessingService> postEntityProcessingServices;
 
-    private Text scoreText;
+    private Text scoreText, healthText;
 
     Game(List<IPluginService> gamePluginServices, List<IProcessingService> entityProcessingServiceList, List<IPostProcessingService> postEntityProcessingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
 
-        scoreText = new Text(10, 20, "Destroyed asteroids: " + gameData.getScore());
+        scoreText = new Text(10, 20, "Destroyed asteroids: " + getScore() );
+        healthText = new Text(10, 40, "Health: " + getHealth() );
     }
 
     public void start(Stage window) throws Exception {
         gameWindow.setPrefSize(900, 900);
         gameWindow.getChildren().add(scoreText);
+        gameWindow.getChildren().add(healthText);
 
         Scene scene = new Scene(gameWindow);
         gameData.setPane(gameWindow);
@@ -82,7 +89,8 @@ class Game {
                 gameData.updateDeltaTime(now);
                 update();
                 draw();
-                scoreText.setText("Destroyed asteroids: " + gameData.getScore());
+                scoreText.setText("Destroyed asteroids: " + getScore() );
+                healthText.setText("Health: " + getHealth() );
             }
         }.start();
     }
@@ -142,5 +150,41 @@ class Game {
             .stream()
             .map( ServiceLoader.Provider::get )
             .collect( toList() );
+    }
+
+    private String getScore() {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/score"))
+                .GET()
+                .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String body = response.body();
+            return body.trim();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+
+    private String getHealth() {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8082/health"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String body = response.body();
+            return body.trim();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "";
+        }
     }
 }

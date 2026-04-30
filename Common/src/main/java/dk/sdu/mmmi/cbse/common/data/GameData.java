@@ -10,7 +10,6 @@ public class GameData {
     private double deltaTime;
     private double timeNow = 0;
     private double timePre = 0;
-    private double score = 0;
     private GameKeyBinds keyBinds;
     private final List<Entity> pendingPlayerEntityHits = new ArrayList<>();
 
@@ -23,14 +22,6 @@ public class GameData {
         this.timeNow = timeNow / 100000000; // time in seconds
         this.deltaTime = this.timeNow - this.timePre; // time between frames
         this.timePre = this.timeNow;
-    }
-
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
     }
 
     public void registerPlayerEntityHit(Entity hitEntity) {
