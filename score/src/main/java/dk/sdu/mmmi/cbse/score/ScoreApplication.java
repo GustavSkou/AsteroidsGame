@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ScoreApplication {
 
+	private static long highScore = 0;
 	private static long score = 0;
 
 	public static void main(String[] args) {
@@ -22,8 +23,23 @@ public class ScoreApplication {
 		return score;
 	}
 
+	@GetMapping("/highscore")
+	public long getScore() {
+		return score;
+	}
+
 	@PostMapping("/score")
 	public long addPoints(@RequestParam(value = "point", defaultValue = "0") long point) {
-		return score = score + point;
+		score = score + point;
+		if (score > highScore) {
+			highScore = score;
+		}
+		return score;
+	}
+
+	@PostMapping("/reset")
+	public long resetPoints(@RequestParam(value = "point", defaultValue = "0") long point) {
+		score = 0;
+		return score;
 	}
 }
