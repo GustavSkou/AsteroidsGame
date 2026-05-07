@@ -20,11 +20,13 @@
         <module>CommonBullet</module>
         <module>CommonEnemy</module>
         <module>Enemy</module>
+        <module>CommonPlayer</module>
         <module>Collision</module>
         <module>Asteroid</module>
         <module>CommonAsteroid</module>
         <module>CommonControlls</module>
         <module>GameControlls</module>
+        <module>GameEnding</module>
 
     </modules>
     <properties>

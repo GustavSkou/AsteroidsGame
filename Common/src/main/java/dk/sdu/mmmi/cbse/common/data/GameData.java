@@ -11,6 +11,7 @@ public class GameData {
     private double timeNow = 0;
     private double timePre = 0;
     private GameKeyBinds keyBinds;
+    private boolean gameEnded;
     private final List<Entity> pendingPlayerEntityHits = new ArrayList<>();
 
     public double getDeltaTime() {
@@ -38,12 +39,24 @@ public class GameData {
         this.pane = pane;
     }
 
+    public Pane getPane() {
+        return pane;
+    }
+
     public GameKeyBinds getKeyBinds() {
         return keyBinds;
     }
 
     public void setKeyBinds(GameKeyBinds keyBinds) {
         this.keyBinds = keyBinds;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    public void setGameEnded(boolean gameEnded) {
+        this.gameEnded = gameEnded;
     }
 
     public int getDisplayWidth() {

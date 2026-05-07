@@ -8,6 +8,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.enemy.Enemy;
+import dk.sdu.mmmi.cbse.common.player.Player;
 import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
 
 import java.net.URI;
@@ -28,12 +29,48 @@ public class CollisionProcessor implements IPostProcessingService {
                 Entity nextEntity = entities[j];
                 double distanceBetweenEntities = distanceBetweenPoints(currentEntity.getX(), currentEntity.getY(), nextEntity.getX(), nextEntity.getY());
                 if (hasCollided(distanceBetweenEntities, currentEntity, nextEntity)) {
+                    // Notify player hit if player was involved
+                    notifyPlayerHitIfNeeded(currentEntity, nextEntity);
+
                     registerPlayerBulletHitEntity(gameData, currentEntity, nextEntity);
                     splitAsteroid(world, currentEntity, nextEntity);
-                    world.removeEntity(currentEntity);
-                    world.removeEntity(nextEntity);
+                    
+                    // Check if player is at 0 HP
+                    boolean playerAtZeroHP = isPlayerAtZeroHP(currentEntity, nextEntity);
+
+                    // Always remove non-player entities
+                    if (currentEntity.getClass() != Player.class) {
+                        world.removeEntity(currentEntity);
+                    }
+                    if (nextEntity.getClass() != Player.class) {
+                        world.removeEntity(nextEntity);
+                    }
+
+                    // Remove player only if at zero HP
+                    if (playerAtZeroHP) {
+                        if (currentEntity.getClass() == Player.class) {
+                            world.removeEntity(currentEntity);
+                        }
+                        if (nextEntity.getClass() == Player.class) {
+                            world.removeEntity(nextEntity);
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private void notifyPlayerHitIfNeeded(Entity e1, Entity e2) {
+        try {
+            if (e1.getClass() == Player.class || e2.getClass() == Player.class) {
+                // decrement health by 1
+                long currentHealth = httpGetLong("http://localhost:8082/health", 0);
+                long newHealth = Math.max(0, currentHealth - 1);
+                httpPost("http://localhost:8082/health?amount=" + newHealth);
+                System.out.println(newHealth);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -112,6 +149,43 @@ public class CollisionProcessor implements IPostProcessingService {
 
     private static Collection<? extends AsteroidSplitterSPI> getAsteroidSplitterSPIs() {
         return ServiceLoader.load(AsteroidSplitterSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private long httpGetLong(String uri, long fallbackValue) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .GET()
+                .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return Long.parseLong(response.body().trim());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return fallbackValue;
+        }
+    }
+
+    private void httpPost(String uri) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean isPlayerAtZeroHP(Entity e1, Entity e2) {
+        if (e1.getClass() == Player.class || e2.getClass() == Player.class) {
+            long currentHealth = httpGetLong("http://localhost:8082/health", 1);
+            return currentHealth <= 0;
+        }
+        return false;
     }
 
     private void addScore(long points) {

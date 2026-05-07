@@ -7,6 +7,7 @@ package dk.sdu.mmmi.cbse.main;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.gameEnding.GameEndingSPI;
 import dk.sdu.mmmi.cbse.common.gameControlls.GameKeyBindsSPI;
 import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IPluginService;
@@ -38,16 +39,18 @@ class Game {
     private final List<IPluginService> gamePluginServices;
     private final List<IProcessingService> entityProcessingServiceList;
     private final List<IPostProcessingService> postEntityProcessingServices;
+    private final List<GameEndingSPI> gameEndingServices;
 
     private Text scoreText, healthText;
 
-    Game(List<IPluginService> gamePluginServices, List<IProcessingService> entityProcessingServiceList, List<IPostProcessingService> postEntityProcessingServices) {
+    Game(List<IPluginService> gamePluginServices, List<IProcessingService> entityProcessingServiceList, List<IPostProcessingService> postEntityProcessingServices, List<GameEndingSPI> gameEndingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
+        this.gameEndingServices = gameEndingServices;
 
-        scoreText = new Text(10, 20, "Destroyed asteroids: " + getScore() );
-        healthText = new Text(10, 40, "Health: " + getHealth() );
+        scoreText = new Text(10, 20, "Destroyed asteroids: " + httpGetScoreValue() );
+        healthText = new Text(10, 40, "Health: " + httpGetHealthValue() );
     }
 
     public void start(Stage window) throws Exception {
@@ -87,10 +90,18 @@ class Game {
             @Override
             public void handle(long now) {
                 gameData.updateDeltaTime(now);
+                if (!gameData.isGameEnded() && hasGameEnded()) {
+                    gameData.setGameEnded(true);
+                    for (GameEndingSPI gameEndingService : getGameEndingServices()) {
+                        gameEndingService.endGame(gameData, world);
+                    }
+                    stop();
+                    return;
+                }
                 update();
                 draw();
-                scoreText.setText("Destroyed asteroids: " + getScore() );
-                healthText.setText("Health: " + getHealth() );
+                scoreText.setText("Destroyed asteroids: " + httpGetScoreValue() );
+                healthText.setText("Health: " + httpGetHealthValue() );
             }
         }.start();
     }
@@ -152,39 +163,37 @@ class Game {
             .collect( toList() );
     }
 
-    private String getScore() {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8081/score"))
-                .GET()
-                .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String body = response.body();
-            return body.trim();
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return "";
-        }
+    public List<GameEndingSPI> getGameEndingServices() {
+        return gameEndingServices;
     }
 
-    private String getHealth() {
+    private boolean hasGameEnded() {
+        return httpGetHealthValue() <= 0;
+    }
+
+    private long httpGetScoreValue() {
+        return httpGetLong("http://localhost:8081/score", 0);
+    }
+
+    private long httpGetHealthValue() {
+        return httpGetLong("http://localhost:8082/health", 1);
+    }
+
+    private long httpGetLong(String uri, long fallbackValue) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/health"))
+                    .uri(URI.create(uri))
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String body = response.body();
-            return body.trim();
+            return Long.parseLong(body.trim());
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            return "";
+            return fallbackValue;
         }
     }
 }

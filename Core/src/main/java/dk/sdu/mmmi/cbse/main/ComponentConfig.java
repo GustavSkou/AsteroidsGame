@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.main;
 import dk.sdu.mmmi.cbse.common.services.IProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IPluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostProcessingService;
+import dk.sdu.mmmi.cbse.common.gameEnding.GameEndingSPI;
 import java.util.List;
 import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
@@ -20,7 +21,8 @@ class ComponentConfig {
         return new Game ( 
             gamePluginServices(), 
             entityProcessingServiceList(), 
-            postEntityProcessingServices() 
+            postEntityProcessingServices(),
+            gameEndingServices()
         );
     }
 
@@ -43,6 +45,14 @@ class ComponentConfig {
     @Bean
     public List<IPostProcessingService> postEntityProcessingServices() {
         return ServiceLoader.load( IPostProcessingService.class )
+            .stream()
+            .map( ServiceLoader.Provider::get )
+            .collect( toList() );
+    }
+
+    @Bean
+    public List<GameEndingSPI> gameEndingServices() {
+        return ServiceLoader.load( GameEndingSPI.class )
             .stream()
             .map( ServiceLoader.Provider::get )
             .collect( toList() );

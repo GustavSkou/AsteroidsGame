@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthApplication {
 
-	private static long health = 100;
+	private static long health = 1;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HealthApplication.class, args);
